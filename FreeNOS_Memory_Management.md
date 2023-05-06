@@ -31,6 +31,9 @@ The Pool struct is used to represent each pool of same-sized objects. This class
 
 Lastly, we have a BubbleAllocator class, which manages a block of contiguous memory and keeps allocating memory at the end of this block. It does not free memory and is essential if providing fast allocation memory chunks varying in size. The allocator keeps track of the last allocated memory address and when a new memory request is made, the allocator returns the next available chunk of memory. It provides an alternative to heap memory allocation and is efficient and lightweight for dynamic memory allocation. The BubbleAllocator does not provide the ability to free individual memory. 
 
+<img width="497" alt="Screenshot 2023-05-05 at 9 39 45 PM" src="https://user-images.githubusercontent.com/31997056/236600185-4607e612-6a4b-4fef-91ee-96fec7b25629.png">
+
+
 The process memory management system in FreeNOS consists of five classes, Allocator, BitAllocator, BubbleAllocator, PoolAllocator, and SplitAllocator. All five are essential to the efficiency of allocating and deallocating memory resources to and from processes. 
 
 

@@ -1,4 +1,4 @@
-#FreeNOS Memory Management by Vaibhavi Jhawar 
+# FreeNOS Memory Management by Vaibhavi Jhawar 
 
 Introduction
 

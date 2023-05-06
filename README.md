@@ -12,17 +12,21 @@ There are several types of memory management systems: single contiguous allocati
 
 Process memory management is the way a computer operating system manages the memory used by programs and application executions. The management system is in charge of freeing up memory when it is no longer being used or requested. In FreeNOS, the paged memory management allocates memory to a process using a virtual memory system, creating the illusion that each process has its own private address space. The SplitAllocator class is in charge of separating kernel-mapped memory at virtual and physical addresses. It takes in a physical memory range, a virtual memory range, and the size of a memory page. The class also contains methods for allocating deallocating physical and virtual memory, releasing memory pages, and converting between physical and virtual addresses. It also uses the BitAllocator class, which is responsible for managing physical memory allocation. 
 
+<img width="497" alt="Screenshot 2023-05-05 at 9 31 16 PM" src="https://user-images.githubusercontent.com/31997056/236600125-d300ffb3-d7fb-4a92-844a-68089745692f.png">
 
 The BitAllocator class allocated memory using a BitArray where all memory is divided in equal-sized chunks. 1 in a BitArray means the chunk is being used and 0 means it's unused. This class is a subclass for the Allocator class, an interface that is used by the main PoolAllocator class. Its constructor takes in three arguments, a range that specifies the memory it should manage, the chunkSize that specifies how much memory is allocated to each chunk, and a pointer to the existing bitmap array, or ZERO to allocate a new bitmap array. 
 
+<img width="496" alt="Screenshot 2023-05-05 at 9 31 28 PM" src="https://user-images.githubusercontent.com/31997056/236600138-91524d4e-1388-431f-b6af-d2f6e197bb80.png">
 
 
 FreeNOS uses an implementation of a memory allocator that uses pools to manage same-sized objects. In the PoolAllocator.h class, pools are allocated memory at the size of a power of 2, and each pool is pre-allocated and has a bitmap that represents free blocks. The minimum size for a pool is 2^2 bits, and the maximum size is 2^27 bits or 128 MiB. 
 
+<img width="497" alt="Screenshot 2023-05-05 at 9 31 36 PM" src="https://user-images.githubusercontent.com/31997056/236600147-a95c4416-72ff-4830-88f2-6834fbeebae0.png">
 
 
 The Pool struct is used to represent each pool of same-sized objects. This class includes several helper functions that are used to calculate object size, minimum object count, and total memory usage. The PoolAllocator class inherits from the Allocator class, an abstract class that defines the interface for memory allocation and deallocation. In the allocator class, memory allocators form a hierarchy of parent-child. A parent allocator is able to allocate memory to a child allocator, and if a child allocator runs out, it can ask the parent for more memory. One parent allocator typically manages multiple memory pools, whereas child allocators are used to subdivide the memory pool being managed by the parent allocator to apply different policies, and management strategies for different parts of a program and subsets of memory. 
 
+<img width="493" alt="Screenshot 2023-05-05 at 9 31 46 PM" src="https://user-images.githubusercontent.com/31997056/236600149-d307b488-16b6-44a3-bd0b-87c1a891bd57.png">
 
 
 Lastly, we have a BubbleAllocator class, which manages a block of contiguous memory and keeps allocating memory at the end of this block. It does not free memory and is essential if providing fast allocation memory chunks varying in size. The allocator keeps track of the last allocated memory address and when a new memory request is made, the allocator returns the next available chunk of memory. It provides an alternative to heap memory allocation and is efficient and lightweight for dynamic memory allocation. The BubbleAllocator does not provide the ability to free individual memory. 
